@@ -3,6 +3,9 @@ const isDev = require("electron-is-dev");
 
 function createWindow() {
   const win = new BrowserWindow({
+    autoHideMenuBar: true,
+    //상단 메뉴바 감추기
+
     width: 1200,
     height: 800,
     minWidth: 550,

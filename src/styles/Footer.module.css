@@ -7,3 +7,22 @@
 
   background-color: #D9D9D9;
 }
+
+.button-area{
+  width: 96%;
+  height: 149%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.repeat{
+  position: absolute;
+  left: 14px;
+  width: 25px;
+  height: 15%;
+}
+.repeat img{
+  width: 105%;
+  height: 105%;
+  object-fit: scale-down;
+}
