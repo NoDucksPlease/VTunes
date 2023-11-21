@@ -9,7 +9,7 @@ const VTunes = () => {
     //showTimerBox boolean은 TimerSetting.jsx 파일에 있다
   return (
     <div className={styles.vtunes}>
-        {true ? <TimerBox/> : null}
+        {showTimerBox ? <TimerBox/> : null}
       <Container />
       <ControlBar />
     </div>

@@ -6,6 +6,7 @@ const PREVIOUS_MUSIC = 'musicController/PREVIOUS_MUSIC';
 const NEXT_MUSIC = 'musicController/NEXT_MUSIC';
 const MOD_SHUFFLE_STATUS = 'musicController/MOD_SHUFFLE_STATUS';
 const MOD_REPEAT_STATUS = 'musicController/MOD_REPEAT_STATUS';
+const MOD_SHOW_TIMER_BOX = 'musicController/MOD_SHOW_TIMER_BOX';
 
 //컴포넌트들에서 dispatch될 액션들
 export const changeCurrentPlaylist = playlist => ({
@@ -30,6 +31,10 @@ export const modRepeatStatus = (input) => ({
   type : MOD_REPEAT_STATUS,
   input
 });
+export const modShowTimerBox = (input) => ({
+  type : MOD_SHOW_TIMER_BOX,
+  input
+});
 
 //repeatStatue와 shuffleStatus
 const repeatStatus = {
@@ -51,6 +56,7 @@ const initialState = {
   currentMusic : null,
   repeatStatus : repeatStatus.REPEAT_OFF,
   shuffleStatus : shuffleStatus.SHUFFLE_OFF,
+  showTimerBox : false,
 }
 
 //reducer function
@@ -122,6 +128,12 @@ function musicController(state = initialState, action){
         ...state,
         repeatStatus : action.input
       };
+
+    case MOD_SHOW_TIMER_BOX:
+      return {
+        ...state,
+        showTimerBox: action.input
+      }
 
     default :
       return state;
