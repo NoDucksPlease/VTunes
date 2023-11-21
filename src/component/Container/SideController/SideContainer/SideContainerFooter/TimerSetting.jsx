@@ -5,18 +5,21 @@ import timerHover from "../../../../../assets/hover/timer.png";
 import timerClick from "../../../../../assets/onClick/timer.png";
 import binBase from "../../../../../assets/base/trashbin.png";
 import binClick from "../../../../../assets/onClick/trashbin.png";
+import {useDispatch, useSelector} from "react-redux";
+import {modShowTimerBox} from "../../../../../modules/musicController";
 
 
 
 const TimerSetting = () =>{
+    const dispatch = useDispatch();
+
+    const modTimerBox = () => dispatch(modShowTimerBox(true));
     //For timer icon
     const [imgTimerClick, setImgTimerClick] = useState(false);
     const [imgTimerHover, setImgTimerHover] = useState(false);
     //For reset-time
     const [imgResetClick, setImgResetClick] = useState(false);
     const [imgResetHover, setImgResetHover] = useState(false);
-    //For timer box
-    const [showTimerBox, setShowTimerBox] = useState(false);
     //timer icon image
     const timerImage = imgTimerClick ? timerClick : imgTimerHover ? timerHover : timerBase;
     //Reset-time value
@@ -32,8 +35,11 @@ const TimerSetting = () =>{
                         src={timerImage}
                         alt="timerImage"
                         onClick={() => {
-                            setImgTimerClick(prev=>!prev);
-                            setShowTimerBox(true);
+                            setImgTimerClick(true);
+                            modTimerBox();
+                            setTimeout(() => {
+                                setImgTimerClick(prev=>!prev);
+                            }, 250);
                         }}
                         onMouseEnter={() => setImgTimerHover(true)}
                         onMouseLeave={() => setImgTimerHover(false)}

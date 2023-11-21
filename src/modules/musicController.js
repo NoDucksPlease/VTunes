@@ -56,7 +56,7 @@ const initialState = {
   currentMusic : null,
   repeatStatus : repeatStatus.REPEAT_OFF,
   shuffleStatus : shuffleStatus.SHUFFLE_OFF,
-  showTimerBox : false,
+  showTimerBox : true,
 }
 
 //reducer function
