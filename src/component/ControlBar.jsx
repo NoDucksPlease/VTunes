@@ -1,108 +1,162 @@
-import {useState} from "react";
+import {useRef, useState, useEffect} from "react";
 import Controller from "../domain/Controller";
 import Playlist from "../domain/Playlist";
 import styles from "../styles/Footer.module.css";
 import MusicPlayer from "react-h5-audio-player";
-import './custom.css';
-
-//Repeat button (Repeat Current)
+import 'react-h5-audio-player/lib/styles.css';
+import '../styles/ControlBar.css';
+import currentPl from '../assets/base/currentPl.png';
+import shuffleIcon from '../assets/base/shuffle.png';
+import currentPlHover from '../assets/hover/currentPl.png';
+import shuffleIconHover from '../assets/hover/shuffle.png';
+import currentPlClick from '../assets/onClick/currentPl.png';
+import shuffleIconClick from '../assets/onClick/shuffle.png';
 import repCurrBase from "../assets/base/Repeat_Current.png"
-import repCurrHover from "../assets/hover/Repeat_Current.png"
-import repCurrClick from "../assets/onClick/Repeat_Current.png"
-//Repeat button (Repeat On)
 import repOnBase from "../assets/base/Repeat_On.png"
-import repOnHover from "../assets/hover/Repeat_On.png"
-import repOnClick from "../assets/onClick/Repeat_On.png"
-//Repeat button (Repeat Off)
 import repOffBase from "../assets/base/Repeat_Off.png"
-import repOffHover from "../assets/hover/Repeat_Off.png"
-import repOffClick from "../assets/onClick/Repeat_Off.png"
 
+  //Enum for repeat states
+  const repeatStates = Object.freeze({
+    OFF: 0,
+    CURRENT: 1,
+    ON: 2
+  })
 
-//Enum for repeat states
-const repeatStates = Object.freeze({
-    OFF: "off",
-    CURRENT: "current",
-    ON: "on"
-})
+const RepeatButton = ({repeatStatus, modRepeatStatus}) => {
 
-const RepeatButton = () => {
   // State of Repeat button
-  const [repeatState, setRepeatState] = useState(repeatStates.OFF);
-  //Mouse movement state tracking
-  const [imgRepeatClick, setImgRepeatClick] = useState(false);
-  const [imgRepeatHover, setImgRepeatHover] = useState(false);
-  //Image file to use; Off as default
-  let repeatImage = repOffBase;
-  //Determine image to use depending on Mouse state
-  switch(repeatState){
+  const [repeatImage, setRepeatImage] = useState(repOffBase);
+  const handleRepeatClick = ()=>{
+  switch (repeatStatus) {
     case repeatStates.OFF:
-      repeatImage = imgRepeatClick ? repOffClick : imgRepeatHover ? repOffBase : repOffBase;
+      setRepeatImage(repCurrBase);
+      modRepeatStatus(repeatStates.CURRENT);
       break;
     case repeatStates.CURRENT:
-      repeatImage = imgRepeatClick ? repCurrClick : imgRepeatHover ? repCurrBase : repCurrBase;
+      setRepeatImage(repOnBase);
+      modRepeatStatus(repeatStates.ON);
       break;
     case repeatStates.ON:
-      repeatImage = imgRepeatClick ? repOnClick : imgRepeatHover ? repOnBase : repOnBase;
+      setRepeatImage(repOffBase);
+      modRepeatStatus(repeatStates.OFF);
       break;
     default:
-      console.log('Out of scope. (BUG)');
+      modRepeatStatus(repeatStatus);
+      break;
+    };
   };
 
   //Return as button
   return (
-      <div className={styles["repeat-wrapper"]}>
-        <div className={styles["button-area"]}>
-          <div className={styles["repeat"]}>
-            <img
-                src={repeatImage}
-                alt="repeat"
-                onClick={() => {
-                  setImgRepeatClick(true);
-                  // Toggle repeatState on click
-                  setRepeatState((prevState) => {
-                    switch (prevState) {
-                      case repeatStates.OFF:
-                        return repeatStates.CURRENT;
-                      case repeatStates.CURRENT:
-                        return repeatStates.ON;
-                      case repeatStates.ON:
-                        return repeatStates.OFF;
-                      default:
-                        return prevState;
-                    }
-                  });
-                  setTimeout(() => {
-                    setImgRepeatClick(prev=>!prev);
-                  }, 250);
-                }}
-                onMouseEnter={() => setImgRepeatHover(true)}
-                onMouseLeave={() => setImgRepeatHover(false)}
-            />
-          </div>
+    <img
+      src={repeatImage}
+      alt="repeat"
+      onClick={() => {
+        handleRepeatClick();
+      }}
+    />
+  );
+};//RepeatButton
+
+const ControlBar = ({
+  selectedPlaylist, 
+  currentPlaylist, 
+  currentMusic, 
+  repeatStatus,
+  onPrevMusic, 
+  onNextMusic,
+  onRepeatCurrentMusic, 
+  isCurrentPlaylistViewed, 
+  onIsCurrentPlaylistViewed,
+  modRepeatStatus,
+  onShuffle,
+  onMusicPlayerRef,
+}) => {
+  const musicPlayerRef = useRef();
+  useEffect(() => {
+    onMusicPlayerRef(musicPlayerRef);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [musicPlayerRef]);
+  const [imgCurrentPlClick, setImgCurrentPlClick] = useState(false);
+  const [imgCurrentPlHover, setImgCurrentPlHover] = useState(false);
+  const [imgShuffleClick, setImgShuffleClick] = useState(false);
+  const [imgShuffleHover, setImgShuffleHover] = useState(false);
+
+  const currentPlImage = imgCurrentPlClick ? currentPlClick : imgCurrentPlHover ? currentPlHover : currentPl;
+  const shuffleIconImage = imgShuffleClick ? shuffleIconClick : imgShuffleHover ? shuffleIconHover : shuffleIcon;
+  const shouldDisableClick = !selectedPlaylist.list || selectedPlaylist.list.length === 0;
+
+  const handleClickControlBar = () =>{
+    if(isCurrentPlaylistViewed) onIsCurrentPlaylistViewed(false);
+    else onIsCurrentPlaylistViewed(true);
+  }
+  return (
+    <div className={styles["footer"]} >
+      <div className={styles["button-area"]}>
+        <RepeatButton repeatStatus={repeatStatus} modRepeatStatus={modRepeatStatus}/>
+        <img 
+          src={shuffleIconImage}
+          alt={"셔플"}
+          onClick={() => {
+            setImgShuffleClick(prev => !prev);
+            setTimeout(() => setImgShuffleClick(false), 200);
+            onShuffle();
+          }}
+          onMouseEnter={() => setImgShuffleHover(true)}
+          onMouseLeave={() => setImgShuffleHover(false)}
+        />
+        <div className={styles["current-playlist-menu"]}>
+        {shouldDisableClick ? (
+          <img
+            src={currentPl}
+            alt={"현재재생목록 보기"}
+          />
+        ) : (
+          <img 
+            src={currentPlImage}
+            alt={"현재재생목록 보기"}
+            onClick={() => {
+            setImgCurrentPlClick(prev => !prev);
+            setTimeout(() => setImgCurrentPlClick(false), 200);
+            handleClickControlBar();
+            }}
+            onMouseEnter={() => setImgCurrentPlHover(true)}
+            onMouseLeave={() => setImgCurrentPlHover(false)}
+          />
+        )}
         </div>
       </div>
-  );
-};
-
-const ControlBar = () => {
-  const [controller, setController] = useState(new Controller(new Playlist()));
-  const [curr, setCurr] = useState("local://C:\\Users\\LEE\\Downloads\\Quick Share\\1.mp3");
-
-  const next = () => setCurr(controller.next());
-  const prev = () => setCurr(controller.prev());
-
-  return (
-    <div className={styles.footer}>
-      <MusicPlayer autoPlay src={curr}
-                   showJumpControls={true}
-                   showSkipControls={true}
-                   onClickPrevious={prev}
-                   onClickNext={next}
-                   onEnded={next}
-                   showFiledVolumn={true}
+      <MusicPlayer ref = {musicPlayerRef}
+        autoPlay src={currentMusic? "local://".concat(currentMusic.path) : ""}
+        showJumpControls={false}
+        showSkipControls={true}
+        onClickPrevious={() => {
+          onPrevMusic();
+        }}
+        onClickNext={() => {
+          onNextMusic();
+        }}
+        onEnded={() => {//음악이 끝나면 자동으로 무엇을 할것인가
+          switch(repeatStatus){
+            case 0://반복 없음
+              break;
+            case 1://한곡 반복
+              // 현재 시간을 0으로 설정하고 노래를 다시 시작
+              if (musicPlayerRef.current) {
+                const audioElement = musicPlayerRef.current.audio.current;
+                audioElement.currentTime = 0;
+                audioElement.play();
+              }
+              break;
+            case 2://플리 반복
+              onNextMusic();
+              break;
+            default:
+              onNextMusic();
+          }
+        }}
+        showFiledVolumn={true} 
       />
-      <RepeatButton/>
     </div>
   );
 };

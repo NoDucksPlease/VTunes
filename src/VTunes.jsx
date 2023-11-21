@@ -1,6 +1,6 @@
 import styles from './VTunes.module.css';
-import ControlBar from "./component/ControlBar";
 import Container from './component/Container';
+import ControlBarContainer from './containers/ControlBarContainer';
 //나도 이게 맞는지 모르겠다
 import TimerBox from "./TimerBox.jsx";
 import {useSelector} from "react-redux";
@@ -13,7 +13,7 @@ const VTunes = () => {
     <div className={styles.vtunes}>
         {showTimerBox ? <TimerBox/> : null}
       <Container />
-      <ControlBar />
+      <ControlBarContainer />
     </div>
   );
 };
