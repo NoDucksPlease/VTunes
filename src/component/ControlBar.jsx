@@ -51,6 +51,7 @@ const RepeatButton = ({repeatStatus, modRepeatStatus}) => {
     <img
       src={repeatImage}
       alt="repeat"
+      cypress-testid="repeat_button"
       onClick={() => {
         handleRepeatClick();
       }}
@@ -97,6 +98,7 @@ const ControlBar = ({
         <img 
           src={shuffleIconImage}
           alt={"셔플"}
+          cypress-testid="shuffle_button"
           onClick={() => {
             setImgShuffleClick(prev => !prev);
             setTimeout(() => setImgShuffleClick(false), 200);

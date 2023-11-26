@@ -67,7 +67,7 @@ const SearchEngine = ({
           )}
         </div>
       </div>
-      <div className={styles["playlist-menu"]} onClick={onPlMenuClick}>
+      <div className={styles["playlist-menu"]} cypress-testid="playlist_menu" onClick={onPlMenuClick}>
         <img
           src={plMenuImage}
           alt="playlistMenu"
