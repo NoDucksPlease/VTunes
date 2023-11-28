@@ -43,7 +43,7 @@ const SearchEngine = ({
   return (
     <div className={styles["search-engine-wrapper"]}>
       <div className={styles["search-engine-area"]}>
-          <div className={styles["search-engine"]}>
+          <div className={styles["search-engine"]} cypress-testid="search_bar">
           <input
             ref={inputRef}
             type="text"

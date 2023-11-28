@@ -37,12 +37,24 @@ describe('UI End-to-End Test', () => {
     cy.get('[cypress-testid="new_playlist_button"]')
         .should("exist")
         .click();
-    cy.get('[cypress-testid="playlist_name_input"]').type("Hello World");
-    
+
+    cy.get('[cypress-testid="playlist_name_input"]').type("Cancel");
+    cy.get('[cypress-testid="cancel_button"]')
+        .trigger("mouseover")
+        .click()
+
+    cy.get('[cypress-testid="new_playlist_button"]')
+        .should("exist")
+        .click();
+
+    cy.get('[cypress-testid="playlist_name_input"]').type("{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}Hello World");
     cy.get('[cypress-testid="confirm_button"]')
         .trigger("mouseover")
         .click()
+
+
   })
+
   it('Prints Invalid Playlist when input is empty', () => {
     cy.visit('localhost:3000')
     cy.viewport(1200, 800)
@@ -107,11 +119,50 @@ describe('UI End-to-End Test', () => {
   it('Move volume pin', () =>{
     cy.visit('localhost:3000')
     cy.viewport(1200, 800)
-    cy.get('.rhap_volume-indicator').should("exist").as('pin')
+    cy.get('.rhap_volume-indicator').should("exist")
+        //.trigger('mousedown')
     /*cy.get('@pin').trigger('mousedown', { which: 1 }); // Start dragging
     cy.get('@pin').trigger('mousemove', { clientX: 10 }); // Drag to a specific position
     cy.get('@pin').trigger('mouseup'); // Drop the pin*/
     
   })
-  
+
+  it('Main Music Controls', () =>{
+    cy.visit('localhost:3000')
+    cy.viewport(1200, 800)
+    //Play-pause button
+    cy.get('.rhap_play-pause-button').should("exist")
+        .click()
+    //Prev-music button and Next-music button
+    //The two buttons have the same names
+    cy.get('.rhap_skip-button').first().should("exist")
+        .click()
+
+    cy.get('.rhap_skip-button').eq(1).should("exist")
+        .click()
+
+
+  })
+
+  it('Lyrics on Album Click', () =>{
+    cy.visit('localhost:3000')
+    cy.viewport(1200, 800)
+    cy.get('[cypress-testid="show_lyrics_button"]').should("exist")
+        .click()
+    //실제 노래가 들어가 있어야 가능
+    //cy.get('[cypress-testid="show_album_button"]').should("exist")
+    //click()
+
+
+  })
+
+  it('Search Music in Playlist', () =>{
+    cy.visit('localhost:3000')
+    cy.viewport(1200, 800)
+    cy.get('[cypress-testid="search_bar"]').should("exist").type("영현이 애창곡")
+    cy.wait(2000)
+    cy.get('[cypress-testid="search_bar"]').should("exist").type("{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}attention")
+
+
+  })
 })

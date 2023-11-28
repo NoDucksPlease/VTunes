@@ -80,7 +80,7 @@ const PlaylistSet = ({
           </div>
           <div className={styles["adder-modal-button-area"]}>
             <button className={styles["confirm-button"]} onClick={handleAddPlaylist} cypress-testid="confirm_button">Confirm</button>
-            <button className={styles["cancel-button"]} onClick={() => { setIsAddClick(false); setIsAlert(false); }}>Cancel</button>
+            <button className={styles["cancel-button"]} onClick={() => { setIsAddClick(false); setIsAlert(false); }} cypress-testid="cancel_button">Cancel</button>
           </div>
         </div>
       )}
