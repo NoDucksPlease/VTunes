@@ -27,7 +27,7 @@ describe('UI End-to-End Test', () => {
         .should("exist")
     
   })
-  it('Creates and Removes playlist', () => {
+  it('Creates Playlist', () => {
     cy.visit('localhost:3000')
     cy.viewport(1200, 800)
   
@@ -52,7 +52,6 @@ describe('UI End-to-End Test', () => {
         .trigger("mouseover")
         .click()
 
-
   })
 
   it('Prints Invalid Playlist when input is empty', () => {
@@ -70,7 +69,7 @@ describe('UI End-to-End Test', () => {
         .click()
   })
   
-  it('Timer Control', () => {
+  it('Set Timer', () => {
     cy.visit('localhost:3000')
     cy.viewport(1200, 800)
     cy.get('[cypress-testid="timer_button"]')
@@ -81,6 +80,12 @@ describe('UI End-to-End Test', () => {
         .should("exist")
         .click();
     cy.wait(1000);
+
+  })
+
+  it('Reset Timer', () => {
+    cy.visit('localhost:3000')
+    cy.viewport(1200, 800)
     cy.get('[cypress-testid="time_left"]')
         .should("exist")
         .trigger("mouseover")
@@ -147,12 +152,13 @@ describe('UI End-to-End Test', () => {
   it('Lyrics on Album Click', () =>{
     cy.visit('localhost:3000')
     cy.viewport(1200, 800)
-    cy.get('[cypress-testid="show_lyrics_button"]').should("exist")
+    cy.get('[cypress-testid="show_lyrics_button"]')
+        .should("exist")
         .click()
     //실제 노래가 들어가 있어야 가능
-    //cy.get('[cypress-testid="show_album_button"]').should("exist")
-    //click()
-
+    cy.get('[cypress-testid="show_album_button"]')
+        .should("exist")
+        .click()
 
   })
 
@@ -163,6 +169,50 @@ describe('UI End-to-End Test', () => {
     cy.wait(2000)
     cy.get('[cypress-testid="search_bar"]').should("exist").type("{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}attention")
 
+  })
+
+  it('Remove music from current playlist', () =>{
+    cy.visit('localhost:3000')
+    cy.viewport(1200, 800)
+    cy.get('[cypress-testid="remover_button"]')
+        .should("exist")
+        .click()
+    cy.get('[cypress-testid="delete_music_button"]')
+        .should("exist")
+        .click();
 
   })
+
+  it('Toggle current Playlist button', () => {
+    cy.visit('localhost:3000')
+    cy.viewport(1200, 800)
+    cy.get('[cypress-testid="playlist_menu"]')
+        .should("exist")
+        .click();
+    //select a playlist
+    cy.get('[cypress-testid"playlist_enter"]')
+        .should("exist")
+        .click();
+    cy.get('[cypress-testid="current_playlist_button_inactive"]')
+        .should("exist")
+        .click()
+  })
+
+
+  it('Delete Playlist', () =>{
+    cy.visit('localhost:3000')
+    cy.viewport(1200, 800)
+    cy.get('[cypress-testid="playlist_menu"]')
+        .should("exist")
+        .click();
+    cy.get('[cypress-testid="delete_playlist_button"]')
+        .should("exist")
+        .click();
+    //PlaylistItem.jsx
+    cy.get('[cypress-testid="delete_button"]')
+        .should("exist")
+        .click();
+
+  })
+
 })

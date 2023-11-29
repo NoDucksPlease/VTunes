@@ -112,11 +112,13 @@ const ControlBar = ({
           <img
             src={currentPl}
             alt={"현재재생목록 보기"}
+            cypress-testid="current_playlist_button_inactive"
           />
         ) : (
           <img 
             src={currentPlImage}
             alt={"현재재생목록 보기"}
+            cypress-testid="current_playlist_button_active"
             onClick={() => {
             setImgCurrentPlClick(prev => !prev);
             setTimeout(() => setImgCurrentPlClick(false), 200);

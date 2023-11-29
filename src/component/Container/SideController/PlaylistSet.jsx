@@ -87,7 +87,7 @@ const PlaylistSet = ({
       <div className={styles["header"]} />{/*본문*/}
       <div className={styles["playlist-adder"]}>
         <button style={buttonStyle} onClick={handleAddClick} cypress-testid="new_playlist_button">New Playlist</button>
-        <button style={buttonStyle} onClick={handleDeleteClick}>Delete Playlist</button>
+        <button style={buttonStyle} onClick={handleDeleteClick} cypress-testid="delete_playlist_button">Delete Playlist</button>
       </div>
       <div className={styles["playlist-set"]}>
         <ScrollList>
